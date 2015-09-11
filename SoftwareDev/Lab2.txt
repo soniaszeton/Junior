@@ -1,0 +1,53 @@
+Use the diff command
+
+1) Which fruits added or removed? 
+     Cranberry, Jackfruit, Nectarine, Prickly Pear
+2) < and > characters mean?
+     They show whats been added and removed. < means removed, > means added
+3) What does adding -c do?
+     Prints out the file and shows exactly where changes have been made
+
+Use the wc command
+
+1) # of lines in testPasswd.txt
+     wc -l testPasswd.txt shows the file has 15 lines
+2) # of characters in testPasswd.txt
+     wc -c testpasswd.txt shows the file has 692 characters
+
+Use the cut command
+
+1) Print list of the usernames from testPasswd.txt
+     Use cut -d':' -f1 testPasswd.txt to print the first column 
+2) Print the LN column and HW1 grade column
+     Use cut -d' ' -f2 -f4 grades.txt
+
+Using Pipes
+
+1) Pring out the groups that users are in
+     cut -d':' -f4 testPasswd.txt | sort -n | uniq
+2) pipe output into a file in home dir
+     cut -d':' -f4 testPasswd.txt | sort -n | uniq  > ~/ output.txt
+3) 
+grep ^[msw] testPasswrd.txt | cut -d ':' -f1
+
+Use the sed command
+1) Remove all the letters, all the numbers, replace all the numbers with an "_"
+     sed 's/[a-zA-Z]//g' leetSpeak.txt
+     sed 's/[0-9]//g' leetSpeak.txt
+     sed 's/[0-9]/_/g' leetSpeak.txt
+2)sed -e 's/4/a/g' \-e 's/3/e/g' \-e 's/0/o/g' \-e 's/5/s/g' \-e 's/7/t/g' \-e 's/1/i/g' leetSpeak.txt
+
+Use awk command
+1) awk '{if(NR != 1){for(i = 3; i <= NF; i++)j+=$i;print $1,$2,j/(NF-2)*100;j=0}else print $1,$2,"grade"}' grades.txt
+
+awk 'BEGIN{s+=3} END{print "class avg = ",(s/(NR-1))}
+awk 'BEGIN{s+=3} END{print "class avg ",(s/(NR-1)*100)}' grades.txt
+
+Regular Expressions
+
+1) egrep -c [0-9]{3}-[0-9]{3}-[0-9]{4} regex_practice_data.txt
+2) egrep -c 303-441-[0-9]{4} regex_practice_data.txt
+3) egrep -c @ regex_practice_data.txt
+4) egrep -c [.]gov regex_practice.data.txt
+5)egrep -c [a-mA-M][.][a-zA-Z] 
+2) 
