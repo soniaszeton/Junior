@@ -21,20 +21,10 @@
  */
 team_struct team =
 {
-      /* Your login ID if working as a one person team
-      or, ID1+ID2 where ID1 is the login ID of the first team member
-      and ID2 is the login ID of the second team member */
-    "", 
-   /* Student name 1: Replace with the full name of first team member */
-   "",
-   /* Login ID 1: Replace with the login ID of first team member */
-   "",
+    "Ninjas > Pirates",
+    "Sonia Szeton",
+    "sosz9489"
 
-   /* The following should only be changed if there are two team members */
-   /* Student name 2: Full name of the second team member */
-   "",
-   /* Login ID 2: Login ID of the second team member */
-   ""
 };
 
 #if 0
@@ -256,10 +246,14 @@ int copyLSB(int x) {
  *   Rating: 3
  */
 int reverseBytes(int x) {
-  int newByte0 = (x >> 24) & 0xFF;
-  int newByte1 = (x >> 8) & 0xFF00;
-  int newByte2 = (x >> 8) & 0xFF0000;
-  int newByte3 = x >> 24;
+  int byteMask0 = 0xFF;
+  int byteMask1 = byteMask0 << 8;
+  int byteMask2 = byteMask1 << 8;
+  int byteMask3 = byteMask2 << 8;
+  int newByte0 = (byteMask3 & x) >> 24;
+  int newByte1 = (byteMask2 & x) >> 8;
+  int newByte2 = (byteMask1 & x) << 8;
+  int newByte3 = (byteMask0 & x) << 24;
   return newByte0 | newByte1 | newByte2 | newByte3;
 }
 /* 
