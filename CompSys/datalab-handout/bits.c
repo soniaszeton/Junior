@@ -168,7 +168,7 @@ NOTES:
  *   Rating: 1
  */
 int bitNor(int x, int y) {
-    return  (~x) & (~y);
+    return (~x) & (~y);
 }
 /* 
  * TMax - return maximum two's complement integer 
@@ -177,7 +177,7 @@ int bitNor(int x, int y) {
  *   Rating: 1
  */
 int tmax(void) {
-  return ~(1 << 31);
+  return ~(0x1 << 31);
 }
 // rating 2
 /* 
@@ -190,8 +190,14 @@ int tmax(void) {
  *   Rating: 2
  */
 int fitsBits(int x, int n) {
-  int mask = x >> 31;
-  return !(((~x & mask) + (x & ~mask)) >> (n + ~0));
+/*
+  int nminus1 = n + ~0;
+  int excludedBits = x >> nminus1;
+  int all0sMask = 0x0;
+  int all1sMask = ~all0sMask;
+  return !(all0sMask | excudedBits) | !(all1sMask & excludedBits);
+*/
+   return 1;
 }
 /* 
  * divpwr2 - Compute x/(2^n), for 0 <= n <= 30
@@ -202,10 +208,13 @@ int fitsBits(int x, int n) {
  *   Rating: 2
  */
 int divpwr2(int x, int n) {
+/*
   int sign = 0x1 << 31;
   int fix = sign & x;
   x = x >> n;
   return fix | x;
+*/
+  return 1;
 }
 /* 
  * isNotEqual - return 0 if x == y, and 1 otherwise 
@@ -215,7 +224,7 @@ int divpwr2(int x, int n) {
  *   Rating: 2
  */
 int isNotEqual(int x, int y) {
-  return !!(x ^ y);
+  return !(x ^ y);
 }
 /* 
  * bitXor - x^y using only ~ and & 
@@ -235,7 +244,7 @@ int bitXor(int x, int y) {
  *   Rating: 2
  */
 int copyLSB(int x) {
-  return ~(x & 1) + 1; 
+  return ~(x & 0x1) + 1; 
 }
 // rating 3
 /* 
@@ -278,21 +287,10 @@ int logicalShift(int x, int n) {
  *   Rating: 3
  */
 int isGreater(int x, int y) {
-/*  int sign = x ^ y;
-  int out = ~sign;
-  int diff = y + (~x + 1);
-  int equal = !diff;
-  sign = sign & x;
-  diff = ~diff;
-  out = out & diff;
-  out = out | sign;
-  out = out & (1 << 31);
-  out = (!!out) & (!equal);
-  return !out; */
-  int value = !((x +~y) >> 31);
-  x = x >> 31;
-  y = y >> 31;
-  return (!x & y) | (value & (!x | y));
+  int diffisPositive = !((x +~y) >> 31);
+  int xisNegative = x >> 31;
+  int yisNegative = y >> 31;
+  return ((!xisNegative) & yisNegative) | (diffisPositive & ((!xisNegative) | yisNegative));
 }
 /* 
  * bitMask - Generate a mask consisting of all 1's 
