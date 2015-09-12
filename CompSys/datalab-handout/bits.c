@@ -23,7 +23,9 @@ team_struct team =
 {
     "Ninjas > Pirates",
     "Sonia Szeton",
-    "sosz9489"
+    "sosz9489",
+    "",
+    ""
 
 };
 
@@ -190,14 +192,8 @@ int tmax(void) {
  *   Rating: 2
  */
 int fitsBits(int x, int n) {
-/*
-  int nminus1 = n + ~0;
-  int excludedBits = x >> nminus1;
-  int all0sMask = 0x0;
-  int all1sMask = ~all0sMask;
-  return !(all0sMask | excudedBits) | !(all1sMask & excludedBits);
-*/
-   return 1;
+  int thirty2minusN = 32 + ~n + 1;
+  return !(((x << thirty2minusN) >> thirty2minusN) ^ x);
 }
 /* 
  * divpwr2 - Compute x/(2^n), for 0 <= n <= 30
@@ -208,13 +204,10 @@ int fitsBits(int x, int n) {
  *   Rating: 2
  */
 int divpwr2(int x, int n) {
-/*
-  int sign = 0x1 << 31;
-  int fix = sign & x;
-  x = x >> n;
-  return fix | x;
-*/
-  return 1;
+   int twoPwrNminus1 = (0x1 << n) + ~0x0;
+   int signofX = x >> 31;
+   int add1 = twoPwrNminus1 & signofX;
+   return (x + add1) >> n;
 }
 /* 
  * isNotEqual - return 0 if x == y, and 1 otherwise 
@@ -224,7 +217,7 @@ int divpwr2(int x, int n) {
  *   Rating: 2
  */
 int isNotEqual(int x, int y) {
-  return !(x ^ y);
+  return !!(x ^ y);
 }
 /* 
  * bitXor - x^y using only ~ and & 
@@ -255,15 +248,23 @@ int copyLSB(int x) {
  *   Rating: 3
  */
 int reverseBytes(int x) {
-  int byteMask0 = 0xFF;
-  int byteMask1 = byteMask0 << 8;
-  int byteMask2 = byteMask1 << 8;
-  int byteMask3 = byteMask2 << 8;
-  int newByte0 = (byteMask3 & x) >> 24;
-  int newByte1 = (byteMask2 & x) >> 8;
-  int newByte2 = (byteMask1 & x) << 8;
-  int newByte3 = (byteMask0 & x) << 24;
+/*
+  int byteMask3 = 0xFF << 24;
+  int byteMask2 = byteMask3 >> 8;
+  int byteMask1 = byteMask2 << 8;
+  int byteMask0 = byteMask1 << 8;
+  int newByte3 = x << 24;
+  int newByte2 = byteMask2 & (x << 8);
+  int newByte1 = byteMask1 & (x >> 8);
+  int newByte0 = x >> 24;
   return newByte0 | newByte1 | newByte2 | newByte3;
+*/
+  int mask = 0xFF;
+  int byte0 = x & mask;
+  int byte1 = (x >> 8) & mask;
+  int byte2 = (x >> 16) & mask;
+  int byte3 = (x >> 24) & mask;
+  return byte3 | (byte2 << 8) | (byte1 << 16) | (byte0 << 24);
 }
 /* 
  * logicalShift - shift x to the right by n, using a logical shift
